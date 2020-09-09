@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Rejestracja</string>
+    <string name="password">Hasło</string>
+    <string name="login">Login</string>
+    <string name="name">Imię</string>
+    <string name="surname">Nazwisko</string>
+    <string name="email">E-mail</string>
+    <string name="register">Zarejestruj się</string>
+    <string name="alreadyRegistered">Posiadasz już konto? Zaloguj się</string>
+    <string name="noAccount">Nie posiadasz konta? Zarejestruj się</string>
+    <string name="logIn">Zaloguj się</string>
+    <string name="accontsOnPhone">Ostatnio zalogowani na urządzeniu: </string>
+    <string name="delete">Usuń konto z telefonu</string>
+</resources>
