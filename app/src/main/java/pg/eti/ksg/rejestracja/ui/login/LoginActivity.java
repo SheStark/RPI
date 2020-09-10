@@ -1,4 +1,4 @@
-package pg.eti.ksg.rejestracja;
+package pg.eti.ksg.rejestracja.ui.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -7,19 +7,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
+
+import pg.eti.ksg.rejestracja.AccountsPhoneRVAdapter;
+import pg.eti.ksg.rejestracja.NavigationActivity;
+import pg.eti.ksg.rejestracja.R;
+import pg.eti.ksg.rejestracja.ValidForms;
+import pg.eti.ksg.rejestracja.ui.register.RegisterActivity;
+import pg.eti.ksg.rejestracja.SharedPreferencesLoginData;
+import pg.eti.ksg.rejestracja.SharedPreferencesLoginManager;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -27,6 +31,8 @@ public class LoginActivity extends AppCompatActivity {
     private ArrayList<SharedPreferencesLoginData> users;
     private RecyclerView RVaccountsOnPhone;
     private SharedPreferencesLoginManager manager;
+    private ValidForms validation;
+    private String login,password;
 
     private AccountsPhoneRVAdapter adapter;
     @Override
@@ -34,11 +40,19 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        manager = new SharedPreferencesLoginManager(this);
+        validation = new ValidForms();
+        String log = manager.logged();
+        if(!log.isEmpty())
+        {
+            Intent intent =new Intent(getApplicationContext(), NavigationActivity.class);
+            startActivity(intent);
+        }
+
         loginTxt=(TextInputLayout) findViewById(R.id.Login);
         passwordTxt=(TextInputLayout) findViewById(R.id.Password);
         RVaccountsOnPhone = (RecyclerView) findViewById(R.id.RVaccountsOnPhone);
 
-        manager = new SharedPreferencesLoginManager(this);
         users = manager.getPreferences();
         if(users.size() == 0) {
             clearRV();
@@ -88,7 +102,35 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void NoAccountBtnClick(View view){
-        Intent intent =new Intent(getApplicationContext(),RegisterActivity.class);
+        Intent intent =new Intent(getApplicationContext(), RegisterActivity.class);
         startActivity(intent);
+    }
+
+    public void LoginBtnClick(View view)
+    {
+        if(!validation.ValidLogin(loginTxt) | !validation.ValidPassword(passwordTxt))
+            return;
+
+        login = loginTxt.getEditText().getText().toString().trim();
+        password =passwordTxt.getEditText().getText().toString().trim();
+        if(!findUser())
+        {
+            Toast.makeText(LoginActivity.this,"Nieprawidłowy login lub hasło",Toast.LENGTH_LONG).show();
+            return;
+        }
+        manager.logIn(login);
+        Intent intent =new Intent(getApplicationContext(), NavigationActivity.class);
+        startActivity(intent);
+
+    }
+
+    public boolean findUser()
+    {
+        for (SharedPreferencesLoginData user : users)
+            if(user.getLogin().equals(login)){
+                if(user.getPassword().equals(password))
+                    return true;
+            }
+        return false;
     }
 }

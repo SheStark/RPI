@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".ui.login.LoginActivity">
 
     <Button
         android:id="@+id/LoginBtn"
         android:layout_width="310dp"
         android:layout_height="50dp"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
+        android:onClick="LoginBtnClick"
         android:text="@string/logIn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Password" />
@@ -49,12 +50,12 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/Password"
         android:layout_width="300dp"
-        android:layout_height="70dp"
+        android:layout_height="100dp"
         android:layout_marginStart="55dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:counterMaxLength="30"
+        android:layout_marginTop="10dp"
         app:counterEnabled="true"
+        app:counterMaxLength="30"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Login"
         app:passwordToggleEnabled="true">
 
@@ -87,4 +88,5 @@
         android:text="@string/accontsOnPhone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/NoAcountBtn" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

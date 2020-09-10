@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SharedPreferencesLoginManager {
 
@@ -63,7 +64,7 @@ public class SharedPreferencesLoginManager {
         addToSharedPreferences();
     }
 
-    public String Logged()
+    public String logged()
     {
         return preferences.getString(SHARED_PREFERENCES_LOGIN,"");
     }
@@ -72,14 +73,14 @@ public class SharedPreferencesLoginManager {
     {
         if (login == null || login.isEmpty())
             return;
-        else if(!preferences.getString(SHARED_PREFERENCES_LOGIN, "").isEmpty())
+        else if(!Objects.requireNonNull(preferences.getString(SHARED_PREFERENCES_LOGIN, "")).isEmpty())
             return;
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(SHARED_PREFERENCES_LOGIN, login);
         editor.apply();
     }
 
-    public void Logout()
+    public void logout()
     {
         if(preferences.getString(SHARED_PREFERENCES_LOGIN, "").isEmpty())
             return;
