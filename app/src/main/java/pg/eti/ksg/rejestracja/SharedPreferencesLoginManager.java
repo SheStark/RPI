@@ -73,7 +73,7 @@ public class SharedPreferencesLoginManager {
     {
         if (login == null || login.isEmpty())
             return;
-        else if(!Objects.requireNonNull(preferences.getString(SHARED_PREFERENCES_LOGIN, "")).isEmpty())
+        else if(!preferences.getString(SHARED_PREFERENCES_LOGIN, "").isEmpty())
             return;
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(SHARED_PREFERENCES_LOGIN, login);

@@ -45,6 +45,7 @@ public class NavigationActivity extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         manager = new SharedPreferencesLoginManager(this);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {

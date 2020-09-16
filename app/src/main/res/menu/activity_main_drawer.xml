@@ -16,6 +16,10 @@
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_slideshow" />
+    </group>
+    <group
+        android:id="@+id/menu_logout"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_menu_logout"
