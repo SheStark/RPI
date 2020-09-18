@@ -18,12 +18,19 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 
 import pg.eti.ksg.rejestracja.AccountsPhoneRVAdapter;
+import pg.eti.ksg.rejestracja.Models.LoginModel;
+import pg.eti.ksg.rejestracja.Models.RegisterModel;
+import pg.eti.ksg.rejestracja.Models.Response;
 import pg.eti.ksg.rejestracja.NavigationActivity;
 import pg.eti.ksg.rejestracja.R;
 import pg.eti.ksg.rejestracja.ValidForms;
+import pg.eti.ksg.rejestracja.server.ServerApi;
+import pg.eti.ksg.rejestracja.server.ServerClient;
 import pg.eti.ksg.rejestracja.ui.register.RegisterActivity;
 import pg.eti.ksg.rejestracja.SharedPreferencesLoginData;
 import pg.eti.ksg.rejestracja.SharedPreferencesLoginManager;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -113,14 +120,32 @@ public class LoginActivity extends AppCompatActivity {
 
         login = loginTxt.getEditText().getText().toString().trim();
         password =passwordTxt.getEditText().getText().toString().trim();
-        if(!findUser())
-        {
-            Toast.makeText(LoginActivity.this,"Nieprawidłowy login lub hasło",Toast.LENGTH_LONG).show();
-            return;
-        }
-        manager.logIn(login);
-        Intent intent =new Intent(getApplicationContext(), NavigationActivity.class);
-        startActivity(intent);
+
+        ServerApi api = ServerClient.getClient();
+        Call<Void> call = api.login(new LoginModel(login,password));
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
+                if(!response.isSuccessful()) {
+                    Toast.makeText(LoginActivity.this, "Nieprawidłowy login lub hasło", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                manager.logIn(login);
+                //if not in database create user and load data
+
+
+
+
+                Intent intent =new Intent(getApplicationContext(), NavigationActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(LoginActivity.this,t.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 
@@ -133,4 +158,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         return false;
     }
+
 }

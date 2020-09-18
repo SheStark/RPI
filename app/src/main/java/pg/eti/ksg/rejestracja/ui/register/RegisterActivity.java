@@ -2,6 +2,8 @@ package pg.eti.ksg.rejestracja.ui.register;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -10,12 +12,19 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import pg.eti.ksg.rejestracja.Models.MessageCodes;
+import pg.eti.ksg.rejestracja.Models.RegisterModel;
+import pg.eti.ksg.rejestracja.Models.Response;
 import pg.eti.ksg.rejestracja.R;
 import pg.eti.ksg.rejestracja.SharedPreferencesLoginData;
 import pg.eti.ksg.rejestracja.SharedPreferencesLoginManager;
 import pg.eti.ksg.rejestracja.ValidForms;
 import pg.eti.ksg.rejestracja.ValidatePatterns;
+import pg.eti.ksg.rejestracja.server.ServerApi;
+import pg.eti.ksg.rejestracja.server.ServerClient;
 import pg.eti.ksg.rejestracja.ui.login.LoginActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -53,19 +62,36 @@ public class RegisterActivity extends AppCompatActivity {
         if (!ValidForm())
             return;
         getValuesForm();
-        // else
-        // start  bound serwis
 
-        //shared preferences
-        manager = new SharedPreferencesLoginManager(this);
+        ServerApi api = ServerClient.getClient();
+        Call<Response> call = api.register(new RegisterModel(login,name,surname,email,password));
 
-        SharedPreferencesLoginData newUser = new SharedPreferencesLoginData(login,name,surname,password);
-        manager.addData(newUser);
+        call.enqueue(new Callback<Response>() {
+            @Override
+            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+                if(!response.isSuccessful())
+                    Toast.makeText(RegisterActivity.this,"Błąd! Spróbuj ponownie później",Toast.LENGTH_LONG).show();
 
-        Toast.makeText(RegisterActivity.this,"Rejestracja przebiegła prawidłowo ",Toast.LENGTH_LONG).show();
-        Intent intent =new Intent(getApplicationContext(),LoginActivity.class);
-        startActivity(intent);
+                if(response.body().getCode() != MessageCodes.OK.getCode()) {
+                    getResponse(MessageCodes.fromInt(response.body().getCode()));
+                    return;
+                }
+                manager = new SharedPreferencesLoginManager(RegisterActivity.this);
 
+                SharedPreferencesLoginData newUser = new SharedPreferencesLoginData(login,name,surname,password);
+                manager.addData(newUser);
+
+                Toast.makeText(RegisterActivity.this,"Rejestracja przebiegła prawidłowo ",Toast.LENGTH_LONG).show();
+                Intent intent =new Intent(getApplicationContext(),LoginActivity.class);
+                startActivity(intent);
+
+            }
+
+            @Override
+            public void onFailure(Call<Response> call, Throwable t) {
+                Toast.makeText(RegisterActivity.this,t.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void getValuesForm()
@@ -85,4 +111,27 @@ public class RegisterActivity extends AppCompatActivity {
         EmailForm = (TextInputLayout)findViewById(R.id.EmailForm);
         PasswordForm = (TextInputLayout)findViewById(R.id.PasswordForm);
     }
+
+    private void getResponse(MessageCodes code) {
+        switch (code) {
+            case INVALIDLOGIN:
+                LoginForm.setError("Podany login już istnieje");
+                break;
+            case INVALIDEMAIL:
+                EmailForm.setError("Podany adres email już istnieje");
+                break;
+            case INVALIDVALUES:
+                Toast.makeText(this, "Nieprawidłowe dane", Toast.LENGTH_LONG).show();
+                break;
+            case ERROR:
+                Toast.makeText(this, "Wystapił nieoczekiwany błąd, spróbuj ponownie później", Toast.LENGTH_LONG).show();
+                break;
+            default:
+                break;
+        }
+    }
+
+
+
+
 }
