@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.login.LoginActivity">
@@ -69,8 +73,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RVaccountsOnPhone"
-        android:layout_width="409dp"
-        android:layout_height="270dp"
+        android:layout_width="414dp"
+        android:layout_height="311dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="1dp"
@@ -90,3 +94,4 @@
         app:layout_constraintTop_toBottomOf="@+id/NoAcountBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>

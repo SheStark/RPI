@@ -1,154 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="true"
-    android:orientation="vertical"
-    tools:context=".ui.register.RegisterActivity">
+    android:fillViewport="true">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/LoginForm"
-        android:layout_width="300dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="30dp"
-        app:counterEnabled="true"
-        app:counterMaxLength="30"
-        app:errorEnabled="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="true"
+        android:orientation="vertical"
+        tools:context=".ui.register.RegisterActivity">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/LoginForm"
             android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/login"
-            android:inputType="textPersonName"
-            android:maxLength="30" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/NameForm"
-        android:layout_width="300dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="20dp"
-        app:errorEnabled="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LoginForm"
-        app:counterEnabled="true"
-        app:counterMaxLength="30">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/name"
-            android:inputType="textPersonName"
-            android:maxLength="30" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/SurnameForm"
-        android:layout_width="300dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="20dp"
-        app:errorEnabled="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/NameForm"
-        app:counterEnabled="true"
-        app:counterMaxLength="30">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/surname"
-            android:inputType="textPersonName"
-            android:maxLength="30"
+            android:layout_height="70dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="30dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="30"
+            app:errorEnabled="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/NameTxt" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/EmailForm"
-        android:layout_width="300dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="20dp"
-        app:errorEnabled="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SurnameForm"
-        app:counterEnabled="true"
-        app:counterMaxLength="50">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/login"
+                android:inputType="textPersonName"
+                android:maxLength="30" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/NameForm"
             android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:maxLength="50"
+            android:layout_height="70dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="20dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="30"
+            app:errorEnabled="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/SurnameTxt" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintTop_toBottomOf="@+id/LoginForm">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/PasswordForm"
-        android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="20dp"
-        app:counterEnabled="true"
-        app:counterMaxLength="30"
-        app:errorEnabled="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/EmailForm"
-        app:passwordToggleEnabled="true">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/name"
+                android:inputType="textPersonName"
+                android:maxLength="30" />
 
-        <com.google.android.material.textfield.TextInputEditText
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/SurnameForm"
             android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:maxLength="30"
-            android:textColorLink="#FFFFFF"
+            android:layout_height="70dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="20dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="30"
+            app:errorEnabled="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/EmailTxt" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintTop_toBottomOf="@+id/NameForm">
 
-    <Button
-        android:id="@+id/RegisterBtn"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="15dp"
-        android:onClick="RegisterBtnClick"
-        android:text="@string/register"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PasswordForm" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/surname"
+                android:inputType="textPersonName"
+                android:maxLength="30"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/NameTxt" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/alreadyRegisteredBtn"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="25dp"
-        android:onClick="AlreadyRegisteredBtnClick"
-        android:text="@string/alreadyRegistered"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/RegisterBtn" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/EmailForm"
+            android:layout_width="300dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="20dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="50"
+            app:errorEnabled="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/SurnameForm">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:maxLength="50"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/SurnameTxt" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/PasswordForm"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="20dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="30"
+            app:errorEnabled="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/EmailForm"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:maxLength="30"
+                android:textColorLink="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/EmailTxt" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/RegisterBtn"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="15dp"
+            android:onClick="RegisterBtnClick"
+            android:text="@string/register"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/PasswordForm" />
+
+        <Button
+            android:id="@+id/alreadyRegisteredBtn"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="25dp"
+            android:onClick="AlreadyRegisteredBtnClick"
+            android:text="@string/alreadyRegistered"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/RegisterBtn" />
 
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
