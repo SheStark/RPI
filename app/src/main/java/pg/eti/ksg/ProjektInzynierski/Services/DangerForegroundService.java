@@ -167,7 +167,6 @@ public class DangerForegroundService extends Service {
 
     public void sendLocation()
     {
-
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
         String localDateTime = format.format(date);
@@ -177,8 +176,6 @@ public class DangerForegroundService extends Service {
             startDanger(pointModel);
         else
             sendPoint(pointModel);
-
-
 
     }
 

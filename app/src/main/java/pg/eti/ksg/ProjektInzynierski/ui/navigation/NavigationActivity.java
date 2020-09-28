@@ -1,13 +1,17 @@
-package pg.eti.ksg.ProjektInzynierski;
+package pg.eti.ksg.ProjektInzynierski.ui.navigation;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.MenuItem;
 import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -16,6 +20,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Users;
+import pg.eti.ksg.ProjektInzynierski.R;
+import pg.eti.ksg.ProjektInzynierski.SharedPreferencesLoginManager;
 import pg.eti.ksg.ProjektInzynierski.ui.login.LoginActivity;
 
 
@@ -23,6 +30,10 @@ public class NavigationActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private SharedPreferencesLoginManager manager;
+    private NavigationViewModel navigationViewModel;
+    private TextView navUserName, navUserEmail;
+    private View headerView;
+    private String login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +51,14 @@ public class NavigationActivity extends AppCompatActivity {
         //});
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         manager = new SharedPreferencesLoginManager(this);
+        login = manager.logged();
         NavigationView navigationView = findViewById(R.id.nav_view);
+        headerView = navigationView.getHeaderView(0);
 
         navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                manager.logout();
-                Intent intent =new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-                return true;
+               return logout();
             }
         });
         // Passing each menu ID as a set of Ids because each
@@ -60,7 +70,17 @@ public class NavigationActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        setTextViews();
 
+    }
+
+    public boolean logout()
+    {
+        if(manager.logout()) {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+        }
+        return true;
     }
 
     @Override
@@ -75,6 +95,22 @@ public class NavigationActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void setTextViews()
+    {
+        navUserEmail = (TextView) headerView.findViewById(R.id.navUserEmail);
+        navUserName = (TextView) headerView.findViewById(R.id.navUserName);
+        navigationViewModel = ViewModelProviders.of(this).get(NavigationViewModel.class);
+        if(login != null ||!login.isEmpty()) {
+            navigationViewModel.getUser(login).observe(this, new Observer<Users>() {
+                @Override
+                public void onChanged(Users users) {
+                    navUserEmail.setText(users.getEmail());
+                    navUserName.setText(users.getName() + " " + users.getSurname());
+                }
+            });
+        }
     }
 
 }

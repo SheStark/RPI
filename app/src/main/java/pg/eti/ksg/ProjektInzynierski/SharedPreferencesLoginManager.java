@@ -16,6 +16,7 @@ public class SharedPreferencesLoginManager {
     private String SHARED_PREFERENCES_KEY="UsersData";
     private String SHARED_PREFERENCES_FILE="LoginPreferences";
     private String SHARED_PREFERENCES_LOGIN="Logged";
+    private String SHARED_PREFERENCES_DATA_SYNCHRONIZED = "DataSynchronized";
 
     private SharedPreferences preferences;
     private Gson gson;
@@ -68,22 +69,57 @@ public class SharedPreferencesLoginManager {
         return preferences.getString(SHARED_PREFERENCES_LOGIN,"");
     }
 
-    public void logIn(String login)
+    public boolean logIn(String login)
     {
-        if (login == null || login.isEmpty())
-            return;
-        else if(!preferences.getString(SHARED_PREFERENCES_LOGIN, "").isEmpty())
-            return;
+        try {
+            if (login == null || login.isEmpty())
+                return false;
+            else if (!preferences.getString(SHARED_PREFERENCES_LOGIN, "").isEmpty())
+                return false;
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(SHARED_PREFERENCES_LOGIN, login);
+            editor.apply();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean logout()
+    {
+        try {
+            if(preferences.getString(SHARED_PREFERENCES_LOGIN, "").isEmpty())
+                return false;
+            preferences.edit().remove(SHARED_PREFERENCES_LOGIN).apply();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean isDataSynchronized()
+    {
+        String value = preferences.getString(SHARED_PREFERENCES_DATA_SYNCHRONIZED,"");
+        if(value == null)
+            return false;
+        else if(value.isEmpty())
+            return false;
+        else return value.equals("true");
+
+    }
+
+    public void setToSynchronized()
+    {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(SHARED_PREFERENCES_LOGIN, login);
+        editor.putString(SHARED_PREFERENCES_DATA_SYNCHRONIZED,"true");
         editor.apply();
     }
 
-    public void logout()
+    public void setToNonSynchronized()
     {
-        if(preferences.getString(SHARED_PREFERENCES_LOGIN, "").isEmpty())
-            return;
-        preferences.edit().remove(SHARED_PREFERENCES_LOGIN).apply();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(SHARED_PREFERENCES_DATA_SYNCHRONIZED,"false");
+        editor.apply();
     }
 
 }

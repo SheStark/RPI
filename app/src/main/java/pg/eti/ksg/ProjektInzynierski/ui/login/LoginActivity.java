@@ -1,12 +1,10 @@
 package pg.eti.ksg.ProjektInzynierski.ui.login;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,9 +19,9 @@ import java.util.ArrayList;
 
 import pg.eti.ksg.ProjektInzynierski.AccountsPhoneRVAdapter;
 import pg.eti.ksg.ProjektInzynierski.Models.LoginModel;
-import pg.eti.ksg.ProjektInzynierski.NavigationActivity;
-import pg.eti.ksg.ProjektInzynierski.Permissions;
+import pg.eti.ksg.ProjektInzynierski.ui.navigation.NavigationActivity;
 import pg.eti.ksg.ProjektInzynierski.R;
+import pg.eti.ksg.ProjektInzynierski.Services.SynchronizeDataService;
 import pg.eti.ksg.ProjektInzynierski.ValidForms;
 import pg.eti.ksg.ProjektInzynierski.server.ServerApi;
 import pg.eti.ksg.ProjektInzynierski.server.ServerClient;
@@ -54,6 +52,11 @@ public class LoginActivity extends AppCompatActivity {
         String log = manager.logged();
         if(!log.isEmpty())
         {
+            if(!manager.isDataSynchronized())
+            {
+                Intent serviceIntent = new Intent(this, SynchronizeDataService.class);
+                SynchronizeDataService.enqueueWork(this,serviceIntent);
+            }
             Intent intent =new Intent(getApplicationContext(), NavigationActivity.class);
             startActivity(intent);
         }
@@ -134,14 +137,14 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                manager.logIn(login);
-                //if not in database create user and load data
+                if(manager.logIn(login)) {
+                    //if not in database create user and load data
+                    Intent serviceIntent = new Intent(getApplicationContext(), SynchronizeDataService.class);
+                    SynchronizeDataService.enqueueWork(getApplicationContext(),serviceIntent);
 
-
-
-
-                Intent intent =new Intent(getApplicationContext(), NavigationActivity.class);
-                startActivity(intent);
+                    Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
+                    startActivity(intent);
+                }
             }
 
             @Override
@@ -160,6 +163,11 @@ public class LoginActivity extends AppCompatActivity {
                     return true;
             }
         return false;
+    }
+
+    public Context getContext()
+    {
+        return this;
     }
 
 }
