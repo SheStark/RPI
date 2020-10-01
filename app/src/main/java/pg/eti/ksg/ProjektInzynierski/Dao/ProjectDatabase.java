@@ -1,7 +1,6 @@
 package pg.eti.ksg.ProjektInzynierski.Dao;
 
 import android.content.Context;
-import android.os.Message;
 
 import androidx.room.Database;
 import androidx.room.Room;

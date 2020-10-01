@@ -9,10 +9,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.google.android.gms.common.api.Api;
-
 import java.util.List;
-import java.util.Optional;
 
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.UserWithFriends;
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Users;

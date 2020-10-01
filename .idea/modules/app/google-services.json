@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "519741947189",
+    "firebase_url": "https://projektinzynierski-98885.firebaseio.com",
+    "project_id": "projektinzynierski-98885",
+    "storage_bucket": "projektinzynierski-98885.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:519741947189:android:d9de27ae9dc7176f08e07c",
+        "android_client_info": {
+          "package_name": "pg.eti.ksg.rejestracja"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "519741947189-c2n8kkeg91f4o9ntgrfgpjld3bnql6j4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pg.eti.ksg.rejestracja",
+            "certificate_hash": "9e006e2abeccc4e2fb9c67d67e363a8f0eb1482a"
+          }
+        },
+        {
+          "client_id": "519741947189-s2m2pajrlke28r3ciou2bn2tng6pj8c1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzsE6f7HSnuA5WhY9BTPOhwa4AJygxKRA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "519741947189-s2m2pajrlke28r3ciou2bn2tng6pj8c1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

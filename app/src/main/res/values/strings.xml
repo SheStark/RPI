@@ -18,9 +18,13 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="my_routes">Moje trasy:</string>
+    <string name="friends_routes">Trasy znajomych:</string>
+
 
     <string name="menu_start">Strona Główna</string>
     <string name="menu_account">Profil</string>
     <string name="menu_map">Twoja lokalizacja</string>
     <string name="menu_logout">Wyloguj się</string>
+    <string name="menu_routes">Udostępnione Trasy</string>
 </resources>

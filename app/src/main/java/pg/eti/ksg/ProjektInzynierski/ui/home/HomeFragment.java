@@ -1,12 +1,10 @@
 package pg.eti.ksg.ProjektInzynierski.ui.home;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,23 +14,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-
+import pg.eti.ksg.ProjektInzynierski.AlertDialogs;
 import pg.eti.ksg.ProjektInzynierski.Permissions;
 import pg.eti.ksg.ProjektInzynierski.R;
 import pg.eti.ksg.ProjektInzynierski.Services.DangerForegroundService;
@@ -40,7 +28,6 @@ import pg.eti.ksg.ProjektInzynierski.Services.DangerForegroundService;
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
-    private TextView locationTxt;
     private boolean permission;
     private Button helpBtn;
 
@@ -49,19 +36,12 @@ public class HomeFragment extends Fragment {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
 
         permission = Permissions.LocationPermission(getContext());
         if(!permission)
             requestPermissions(Permissions.LOCATION_PERMISSIONS,Permissions.LOCATION_REQUEST_CODE);
 
-        locationTxt = root.findViewById(R.id.locationTxt);
         helpBtn = root.findViewById(R.id.helpBtn);
 
 
@@ -78,6 +58,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResult){
         permission = Permissions.checkRequestCode(requestCode,permissions,grantResult);
+
     }
 
     public void help() {
@@ -86,8 +67,12 @@ public class HomeFragment extends Fragment {
             getActivity().stopService(service);
         }
         else if (permission) {
-            //getLocation();
-            getActivity().startService(service);
+            if(Permissions.isLocationEnabled(getContext()))
+                getActivity().startService(service);
+            else
+            {
+                AlertDialogs.locationDisabledAlertDialog(getContext());
+            }
         }else
             requestPermissions(Permissions.LOCATION_PERMISSIONS,Permissions.LOCATION_REQUEST_CODE);
     }

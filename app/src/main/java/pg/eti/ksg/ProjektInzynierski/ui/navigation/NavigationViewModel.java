@@ -8,7 +8,6 @@ import androidx.lifecycle.LiveData;
 
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Users;
 import pg.eti.ksg.ProjektInzynierski.Repository.UserRepository;
-import pg.eti.ksg.ProjektInzynierski.SharedPreferencesLoginManager;
 
 public class NavigationViewModel extends AndroidViewModel {
 

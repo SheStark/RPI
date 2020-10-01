@@ -1,6 +1,5 @@
 package pg.eti.ksg.ProjektInzynierski.DatabaseEntities;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Embedded;
 import androidx.room.Junction;
 import androidx.room.Relation;

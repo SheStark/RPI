@@ -5,11 +5,8 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import java.util.List;
-
 import pg.eti.ksg.ProjektInzynierski.Dao.ProjectDatabase;
 import pg.eti.ksg.ProjektInzynierski.Dao.UserDao;
-import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Friends;
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.UserWithFriends;
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Users;
 

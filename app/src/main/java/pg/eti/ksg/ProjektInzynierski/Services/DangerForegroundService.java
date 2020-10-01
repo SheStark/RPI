@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import pg.eti.ksg.ProjektInzynierski.AlertDialogs;
 import pg.eti.ksg.ProjektInzynierski.Models.PointModel;
 import pg.eti.ksg.ProjektInzynierski.Models.ResponseModel;
 import pg.eti.ksg.ProjektInzynierski.R;
@@ -205,6 +206,7 @@ public class DangerForegroundService extends Service {
             @Override
             public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                 if(!response.isSuccessful()){
+                    //AlertDialogs.serverError(getApplicationContext());
                     stopSelf();
                     return;
                 }
@@ -214,6 +216,7 @@ public class DangerForegroundService extends Service {
 
             @Override
             public void onFailure(Call<ResponseModel> call, Throwable t) {
+                //AlertDialogs.networkError(getApplicationContext());
                 stopSelf();
                 return;
             }

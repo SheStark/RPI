@@ -8,12 +8,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 
@@ -47,11 +49,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+       // Log.d("Token", FirebaseInstanceId.getInstance().getToken());
         manager = new SharedPreferencesLoginManager(this);
         validation = new ValidForms();
         String log = manager.logged();
         if(!log.isEmpty())
         {
+
             if(!manager.isDataSynchronized())
             {
                 Intent serviceIntent = new Intent(this, SynchronizeDataService.class);
@@ -97,7 +101,6 @@ public class LoginActivity extends AppCompatActivity {
             RVaccountsOnPhone.setLayoutManager(new LinearLayoutManager(this));
             RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
             RVaccountsOnPhone.addItemDecoration(itemDecoration);
-
         }
     }
     public void clearRV()
@@ -127,8 +130,9 @@ public class LoginActivity extends AppCompatActivity {
         login = loginTxt.getEditText().getText().toString().trim();
         password =passwordTxt.getEditText().getText().toString().trim();
 
+        String token = FirebaseInstanceId.getInstance().getToken();
         ServerApi api = ServerClient.getClient();
-        Call<Void> call = api.login(new LoginModel(login,password));
+        Call<Void> call = api.login(new LoginModel(login,password,token));
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
