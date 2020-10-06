@@ -1,5 +1,9 @@
 package pg.eti.ksg.ProjektInzynierski.server;
 
+import java.util.List;
+
+import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Friends;
+import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Routes;
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Users;
 import pg.eti.ksg.ProjektInzynierski.Models.LoginModel;
 import pg.eti.ksg.ProjektInzynierski.Models.PointModel;
@@ -27,4 +31,25 @@ public interface ServerApi {
 
     @GET("/user/{login}")
     Call<Users> getCurrentUser(@Path("login") String login);
+
+    @GET("invitations/{login}")
+    Call<List<Users>>  getUserInvitations(@Path("login") String login);
+
+    @POST("invitations/{userLogin}/invite/{invitationLogin}")
+    Call<ResponseModel> sendInvitation(@Path("userLogin") String userLogin, @Path("invitationLogin") String invitationLogin);
+
+    @GET("friends/{login}")
+    Call<List<Friends>> getUserFriends(@Path("login") String login);
+
+    @POST("invitations/{userLogin}/accept/{friendLogin}")
+    Call<Friends> acceptInvitation(@Path("userLogin") String userLogin, @Path("friendLogin") String friendLogin);
+
+    @POST("invitations/{userLogin}/dismiss/{invitationLogin}")
+    Call<ResponseModel> dismissInvitation(@Path("userLogin") String userLogin, @Path("invitationLogin") String invitationLogin);
+
+    @GET("/routes/my/{login}")
+    Call<List<Routes>> getMyRoutes(@Path("login") String userLogin);
+
+    @GET("/routes/friends/{login}")
+    Call<List<Routes>> getFriendsRoutes(@Path("login") String userLogin);
 }

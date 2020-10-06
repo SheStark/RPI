@@ -12,6 +12,7 @@ import androidx.room.Update;
 import java.util.List;
 
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.UserWithFriends;
+import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.UserWithRoutes;
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Users;
 
 @Dao
@@ -45,6 +46,7 @@ public interface UserDao {
     @Transaction
     @Query("SELECT * FROM Users WHERE user_login = :login")
     UserWithFriends getFriendsSync(String login);
+
 
 
 }

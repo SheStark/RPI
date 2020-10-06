@@ -20,6 +20,15 @@
             android:id="@+id/nav_routes"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_routes" />
+        <item
+            android:id="@+id/nav_friends"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_friends" />
+        <item
+            android:id="@+id/nav_invitations"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_invitations" />
+
     </group>
     <group
         android:id="@+id/menu_logout"

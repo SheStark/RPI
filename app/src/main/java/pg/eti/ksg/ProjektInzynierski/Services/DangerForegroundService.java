@@ -31,7 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import pg.eti.ksg.ProjektInzynierski.AlertDialogs;
 import pg.eti.ksg.ProjektInzynierski.Models.PointModel;
 import pg.eti.ksg.ProjektInzynierski.Models.ResponseModel;
 import pg.eti.ksg.ProjektInzynierski.R;
@@ -72,7 +71,7 @@ public class DangerForegroundService extends Service {
         Notification notification =new NotificationCompat.Builder(this,CHANNEL_ID)
                 .setContentTitle("Udostępnianie lokalizacji")
                 .setContentText("Niebezpieczeństwo! Twoja lokalizacja udostępniana jest znajomym")
-                .setSmallIcon(R.drawable.ic_baseline_location_on_24)
+                .setSmallIcon(R.drawable.ic_baseline_location_on_black)
                 .setContentIntent(pendingIntent)
                 .build();
 

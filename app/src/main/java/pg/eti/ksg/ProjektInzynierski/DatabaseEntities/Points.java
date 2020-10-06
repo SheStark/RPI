@@ -12,6 +12,7 @@ public class Points {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
+    @ColumnInfo(name = "point_id")
     private Long id;
 
     @ColumnInfo(name="route_id")

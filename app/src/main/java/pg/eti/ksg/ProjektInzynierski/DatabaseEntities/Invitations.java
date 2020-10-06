@@ -1,6 +1,7 @@
 package pg.eti.ksg.ProjektInzynierski.DatabaseEntities;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -9,6 +10,7 @@ public class Invitations {
 
     @PrimaryKey
     @NonNull
+    @ColumnInfo(name = "invitation_login")
     private String login;
 
     private String name;

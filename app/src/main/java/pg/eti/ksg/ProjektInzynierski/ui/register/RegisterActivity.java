@@ -73,10 +73,6 @@ public class RegisterActivity extends AppCompatActivity {
                     getResponse(MessageCodes.fromInt(response.body().getCode()));
                     return;
                 }
-                manager = new SharedPreferencesLoginManager(RegisterActivity.this);
-
-                SharedPreferencesLoginData newUser = new SharedPreferencesLoginData(login,name,surname,password);
-                manager.addData(newUser);
 
                 Toast.makeText(RegisterActivity.this,"Rejestracja przebiegła prawidłowo ",Toast.LENGTH_LONG).show();
                 Intent intent =new Intent(getApplicationContext(),LoginActivity.class);

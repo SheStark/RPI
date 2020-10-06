@@ -37,9 +37,11 @@ public class AlertDialogs {
     {
         new AlertDialog.Builder(context)
                 .setTitle("Problem z siecią")
-                .setMessage("nie można nawiązać połączenia z serwerem, sprawdź połączenie internetowe i spróbuj ponownie urucomic usługę")
+                .setMessage("nie można nawiązać połączenia z serwerem, sprawdź połączenie internetowe i spróbuj ponownie uruchomic usługę")
+                .setPositiveButton("Ok",null)
                 .setCancelable(true)
                 .create()
                 .show();
     }
+
 }

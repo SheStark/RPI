@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -19,7 +18,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 
-import pg.eti.ksg.ProjektInzynierski.AccountsPhoneRVAdapter;
+import pg.eti.ksg.ProjektInzynierski.ui.RecyclerViews.AccountsPhoneRVAdapter;
 import pg.eti.ksg.ProjektInzynierski.Models.LoginModel;
 import pg.eti.ksg.ProjektInzynierski.ui.navigation.NavigationActivity;
 import pg.eti.ksg.ProjektInzynierski.R;
@@ -159,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public boolean findUser()
+   /* public boolean findUser()
     {
         for (SharedPreferencesLoginData user : users)
             if(user.getLogin().equals(login)){
@@ -167,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
                     return true;
             }
         return false;
-    }
+    }*/
 
     public Context getContext()
     {

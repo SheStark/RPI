@@ -28,4 +28,16 @@
         android:name="pg.eti.ksg.ProjektInzynierski.ui.routes.RoutesFragment"
         android:label="@string/menu_routes"
         tools:layout="@layout/routes_fragment" />
+
+    <fragment
+        android:id="@+id/nav_friends"
+        android:name="pg.eti.ksg.ProjektInzynierski.ui.friends.friends"
+        android:label="@string/menu_friends"
+        tools:layout="@layout/friends_fragment" />
+
+    <fragment
+        android:id="@+id/nav_invitations"
+        android:name="pg.eti.ksg.ProjektInzynierski.ui.invitations.invitations"
+        android:label="@string/menu_invitations"
+        tools:layout="@layout/invitations_fragment" />
 </navigation>

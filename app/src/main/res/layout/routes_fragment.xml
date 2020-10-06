@@ -25,7 +25,8 @@
             android:layout_marginStart="1dp"
             android:layout_marginTop="40dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/myRoutesRV" />
+            app:layout_constraintTop_toBottomOf="@+id/myRoutesRV"
+            tools:listitem="@layout/friend_routes_recyclerview"/>
 
         <TextView
             android:id="@+id/myRoutesTxt"

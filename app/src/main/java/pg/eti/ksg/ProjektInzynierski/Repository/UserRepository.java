@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Delete;
 
 import pg.eti.ksg.ProjektInzynierski.Dao.ProjectDatabase;
 import pg.eti.ksg.ProjektInzynierski.Dao.UserDao;
@@ -32,6 +33,17 @@ public class UserRepository {
     {
         new InsertAsyncTask(userDao).execute(user);
     }
+
+    public void update(Users user)
+    {
+        new UpdateAsyncTask(userDao).execute(user);
+    }
+
+    public void delete(Users user)
+    {
+        new DeleteAsyncTask(userDao).execute(user);
+    }
+
 
     public LiveData<Users> getUser() {
         if(user == null)
@@ -67,6 +79,36 @@ public class UserRepository {
         @Override
         protected Void doInBackground(Users... users) {
             userDao.insert(users[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateAsyncTask extends AsyncTask<Users,Void,Void>{
+
+        private UserDao userDao;
+
+        public UpdateAsyncTask(UserDao userDao) {
+            this.userDao = userDao;
+        }
+
+        @Override
+        protected Void doInBackground(Users... users) {
+            userDao.update(users[0]);
+            return null;
+        }
+    }
+
+    private static class DeleteAsyncTask extends AsyncTask<Users,Void,Void>{
+
+        private UserDao userDao;
+
+        public DeleteAsyncTask(UserDao userDao) {
+            this.userDao = userDao;
+        }
+
+        @Override
+        protected Void doInBackground(Users... users) {
+            userDao.delete(users[0]);
             return null;
         }
     }

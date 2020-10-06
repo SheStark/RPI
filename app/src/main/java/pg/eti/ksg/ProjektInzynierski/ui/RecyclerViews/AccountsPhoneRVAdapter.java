@@ -1,4 +1,4 @@
-package pg.eti.ksg.ProjektInzynierski;
+package pg.eti.ksg.ProjektInzynierski.ui.RecyclerViews;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import pg.eti.ksg.ProjektInzynierski.R;
+import pg.eti.ksg.ProjektInzynierski.SharedPreferencesLoginData;
 
 public class AccountsPhoneRVAdapter extends RecyclerView.Adapter<AccountsPhoneRVAdapter.ViewHolder> {
 

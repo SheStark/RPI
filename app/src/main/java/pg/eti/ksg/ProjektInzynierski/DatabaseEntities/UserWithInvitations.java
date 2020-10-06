@@ -9,9 +9,18 @@ import java.util.List;
 public class UserWithInvitations {
     @Embedded
     private Users user;
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
+    public void setInvitations(List<Invitations> invitations) {
+        this.invitations = invitations;
+    }
+
     @Relation(
-            parentColumn = "userLogin",
-            entityColumn = "invitationLogin",
+            parentColumn = "user_login",
+            entityColumn = "invitation_login",
             associateBy = @Junction(UserInvitations.class)
     )
     private List<Invitations> invitations;
