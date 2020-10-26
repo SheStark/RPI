@@ -30,9 +30,12 @@ public interface PointsDao {
     void delete(Points point);
 
 
-    @Query("SELECT * FROM Points WHERE route_id =:routeId ORDER BY point_date ASC")
+    @Query("SELECT * FROM Points WHERE route_id =:routeId ORDER BY point_date DESC")
     LiveData<List<Points>> getRoutePoints(Long routeId);
 
     @Query("DELETE FROM points WHERE route_id = :routeId")
     void deleteRoutesPoints(Long routeId);
+
+    @Query("SELECT * FROM Points WHERE point_id = :id")
+    Points getPoint(Long id);
 }

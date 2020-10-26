@@ -27,8 +27,22 @@ public class Points {
     public Points() {
     }
 
-    public Points(Long routeId, double lat, double lng, Date date) {
+    /*public Points(Long routeId, double lat, double lng, Date date) {
         this.routeId = routeId;
+        this.lat = lat;
+        this.lng = lng;
+        this.date = date;
+    }*/
+
+    public Points(@NonNull Long id, Long routeId, double lat, double lng, Date date) {
+        this.id = id;
+        this.routeId = routeId;
+        this.lat = lat;
+        this.lng = lng;
+        this.date = date;
+    }
+
+    public Points(double lat, double lng, Date date) {
         this.lat = lat;
         this.lng = lng;
         this.date = date;

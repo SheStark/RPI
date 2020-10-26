@@ -3,12 +3,15 @@ package pg.eti.ksg.ProjektInzynierski.server;
 import java.util.List;
 
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Friends;
+import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Points;
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Routes;
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Users;
+import pg.eti.ksg.ProjektInzynierski.Models.IdsModel;
 import pg.eti.ksg.ProjektInzynierski.Models.LoginModel;
-import pg.eti.ksg.ProjektInzynierski.Models.PointModel;
+
 import pg.eti.ksg.ProjektInzynierski.Models.RegisterModel;
 import pg.eti.ksg.ProjektInzynierski.Models.ResponseModel;
+import pg.eti.ksg.ProjektInzynierski.Models.RouteWithPoints;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -24,10 +27,10 @@ public interface ServerApi {
     Call<Void> login(@Body LoginModel loginModel);
 
     @POST("/danger/{login}")
-    Call<Void> sendPoint(@Path("login") String login, @Body PointModel pointModel);
+    Call<IdsModel> sendPoint(@Path("login") String login, @Body Points point);
 
     @POST("/danger/{login}/start")
-    Call<ResponseModel> startDanger(@Path("login") String login, @Body PointModel pointModel);
+    Call<IdsModel> startDanger(@Path("login") String login, @Body Points point);
 
     @GET("/user/{login}")
     Call<Users> getCurrentUser(@Path("login") String login);
@@ -48,8 +51,11 @@ public interface ServerApi {
     Call<ResponseModel> dismissInvitation(@Path("userLogin") String userLogin, @Path("invitationLogin") String invitationLogin);
 
     @GET("/routes/my/{login}")
-    Call<List<Routes>> getMyRoutes(@Path("login") String userLogin);
+    Call<List<RouteWithPoints>> getMyRoutes(@Path("login") String userLogin);
 
     @GET("/routes/friends/{login}")
-    Call<List<Routes>> getFriendsRoutes(@Path("login") String userLogin);
+    Call<List<RouteWithPoints>> getFriendsRoutes(@Path("login") String userLogin);
+
+    @POST("/user/logout/{login}")
+    Call<ResponseModel> logout(@Path("login") String userLogin);
 }

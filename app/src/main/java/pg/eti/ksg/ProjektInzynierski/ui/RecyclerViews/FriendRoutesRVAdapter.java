@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Routes;
@@ -42,6 +44,12 @@ public class FriendRoutesRVAdapter extends RecyclerView.Adapter<FriendRoutesRVAd
     }
 
     public void setRoutes(List<Routes> routes) {
+        Collections.sort(routes, new Comparator<Routes>() {
+            @Override
+            public int compare(Routes o1, Routes o2) {
+                return o2.getStartDate().compareTo(o1.getStartDate());
+            }
+        });
         this.routes = routes;
         notifyDataSetChanged();
     }

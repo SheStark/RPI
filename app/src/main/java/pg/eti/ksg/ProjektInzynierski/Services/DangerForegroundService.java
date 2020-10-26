@@ -31,9 +31,12 @@ import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import pg.eti.ksg.ProjektInzynierski.Models.PointModel;
-import pg.eti.ksg.ProjektInzynierski.Models.ResponseModel;
+import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Points;
+import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Routes;
+import pg.eti.ksg.ProjektInzynierski.Models.IdsModel;
 import pg.eti.ksg.ProjektInzynierski.R;
+import pg.eti.ksg.ProjektInzynierski.Repository.PointsRepository;
+import pg.eti.ksg.ProjektInzynierski.Repository.RoutesRepository;
 import pg.eti.ksg.ProjektInzynierski.SharedPreferencesLoginManager;
 import pg.eti.ksg.ProjektInzynierski.server.ServerApi;
 import pg.eti.ksg.ProjektInzynierski.server.ServerClient;
@@ -42,7 +45,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static pg.eti.ksg.ProjektInzynierski.App.CHANNEL_ID;
+import static pg.eti.ksg.ProjektInzynierski.App.FOREGROUND_SERVICE_CHANNEL;
 
 public class DangerForegroundService extends Service {
 
@@ -53,9 +56,11 @@ public class DangerForegroundService extends Service {
     private FusedLocationProviderClient location;
     private LocationCallback locationCallback;
     private ServerApi api;
-    private int id;
+    private Long id;
     private LatLng latLng;
     private boolean startD;
+    private RoutesRepository routesRepository;
+    private PointsRepository pointsRepository;
 
     @Override
     public void onCreate() {
@@ -68,7 +73,7 @@ public class DangerForegroundService extends Service {
         Intent notificationIntent = new Intent(this, HomeFragment.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
 
-        Notification notification =new NotificationCompat.Builder(this,CHANNEL_ID)
+        Notification notification =new NotificationCompat.Builder(this, FOREGROUND_SERVICE_CHANNEL)
                 .setContentTitle("Udostępnianie lokalizacji")
                 .setContentText("Niebezpieczeństwo! Twoja lokalizacja udostępniana jest znajomym")
                 .setSmallIcon(R.drawable.ic_baseline_location_on_black)
@@ -87,6 +92,7 @@ public class DangerForegroundService extends Service {
         login = manager.logged();
         if(login == null || login.isEmpty())
             stopSelf();
+
         setCallback();
         location = LocationServices.getFusedLocationProviderClient(this);
 
@@ -167,54 +173,66 @@ public class DangerForegroundService extends Service {
 
     public void sendLocation()
     {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+       // SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
-        String localDateTime = format.format(date);
+       // String localDateTime = format.format(date);
 
-        PointModel pointModel = new PointModel(latLng.latitude,latLng.longitude,localDateTime);
+
+        Points point = new Points(latLng.latitude,latLng.longitude,date);
         if(startD)
-            startDanger(pointModel);
+            startDanger(point);
         else
-            sendPoint(pointModel);
+            sendPoint(point);
 
     }
 
-    public void sendPoint(PointModel point){
-        point.setId(id);
+    public void sendPoint(Points point){
+        point.setRouteId(id);
         Call send = api.sendPoint(login,point);
-        send.enqueue(new Callback<Void>() {
+        send.enqueue(new Callback<IdsModel>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<IdsModel> call, Response<IdsModel> response) {
                 if(response.isSuccessful()){
                     return;
                 }
-                Log.d("Foreground service","Save to shared preferences");
+
+                long pointId = response.body().getPointId();
+                point.setId(pointId);
+                pointsRepository.insert(point);
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<IdsModel> call, Throwable t) {
                 Log.d("Foreground service","Save to shared preferences");
             }
         });
     }
 
-    public void startDanger(PointModel point)
+    public void startDanger(Points point)
     {
         Call start = api.startDanger(login,point);
-        start.enqueue(new Callback<ResponseModel>() {
+        start.enqueue(new Callback<IdsModel>() {
             @Override
-            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+            public void onResponse(Call<IdsModel> call, Response<IdsModel> response) {
                 if(!response.isSuccessful()){
                     //AlertDialogs.serverError(getApplicationContext());
                     stopSelf();
                     return;
                 }
-                id = response.body().getCode();
+                id = response.body().getRouteId();
                 startD = false;
+                long pointId= response.body().getPointId();
+                routesRepository = new RoutesRepository(getApplication(),login);
+                pointsRepository = new PointsRepository(getApplication());
+                point.setRouteId(id);
+                point.setId(pointId);
+                routesRepository.insert(new Routes(id, login, true, point.getDate()));
+                pointsRepository.insert(point);
+
             }
 
             @Override
-            public void onFailure(Call<ResponseModel> call, Throwable t) {
+            public void onFailure(Call<IdsModel> call, Throwable t) {
                 //AlertDialogs.networkError(getApplicationContext());
                 stopSelf();
                 return;

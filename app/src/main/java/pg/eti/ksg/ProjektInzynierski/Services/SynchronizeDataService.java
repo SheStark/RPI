@@ -12,10 +12,13 @@ import java.util.List;
 
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Friends;
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Invitations;
+import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Points;
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Routes;
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Users;
+import pg.eti.ksg.ProjektInzynierski.Models.RouteWithPoints;
 import pg.eti.ksg.ProjektInzynierski.Repository.FriendsRepository;
 import pg.eti.ksg.ProjektInzynierski.Repository.InvitationsRepository;
+import pg.eti.ksg.ProjektInzynierski.Repository.PointsRepository;
 import pg.eti.ksg.ProjektInzynierski.Repository.RoutesRepository;
 import pg.eti.ksg.ProjektInzynierski.Repository.UserRepository;
 import pg.eti.ksg.ProjektInzynierski.SharedPreferencesLoginData;
@@ -107,13 +110,17 @@ public class SynchronizeDataService extends JobIntentService {
                 if(userLogin != null)
                 {
                     RoutesRepository routesRepository =new RoutesRepository(getApplication(),userLogin);
-                    Call<List<Routes>> myRoutes = api.getMyRoutes(userLogin);
-                    Response<List<Routes>> response = myRoutes.execute();
+                    PointsRepository pointsRepository = new PointsRepository(getApplication());
+                    Call<List<RouteWithPoints>> myRoutes = api.getMyRoutes(userLogin);
+                    Response<List<RouteWithPoints>> response = myRoutes.execute();
                     if(response.isSuccessful())
                     {
                         if(response.body() != null)
-                            for(Routes route: response.body()){
-                                routesRepository.insert(route);
+                            for(RouteWithPoints route: response.body()){
+                                routesRepository.insert(route.getRoute());
+                                for(Points point: route.getPoints()){
+                                    pointsRepository.insert(point);
+                                }
                             }
                     }
                     else
@@ -123,13 +130,17 @@ public class SynchronizeDataService extends JobIntentService {
                 if(userLogin != null)
                 {
                     RoutesRepository routesRepository =new RoutesRepository(getApplication(),userLogin);
-                    Call<List<Routes>> friendsRoutes = api.getFriendsRoutes(userLogin);
-                    Response<List<Routes>> response = friendsRoutes.execute();
+                    PointsRepository pointsRepository = new PointsRepository(getApplication());
+                    Call<List<RouteWithPoints>> friendsRoutes = api.getFriendsRoutes(userLogin);
+                    Response<List<RouteWithPoints>> response = friendsRoutes.execute();
                     if(response.isSuccessful())
                     {
                         if(response.body() != null)
-                            for(Routes route: response.body()){
-                                routesRepository.insert(route);
+                            for(RouteWithPoints  route: response.body()){
+                                routesRepository.insert(route.getRoute());
+                                for(Points point: route.getPoints()){
+                                    pointsRepository.insert(point);
+                                }
                             }
                     }
                     else

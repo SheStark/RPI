@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -23,9 +24,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Users;
+import pg.eti.ksg.ProjektInzynierski.Models.MessageCodes;
+import pg.eti.ksg.ProjektInzynierski.Models.ResponseModel;
 import pg.eti.ksg.ProjektInzynierski.R;
 import pg.eti.ksg.ProjektInzynierski.SharedPreferencesLoginManager;
+import pg.eti.ksg.ProjektInzynierski.server.ServerApi;
+import pg.eti.ksg.ProjektInzynierski.server.ServerClient;
 import pg.eti.ksg.ProjektInzynierski.ui.login.LoginActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class NavigationActivity extends AppCompatActivity {
@@ -78,9 +86,34 @@ public class NavigationActivity extends AppCompatActivity {
 
     public boolean logout()
     {
-        if(manager.logout()) {
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
+        String login = manager.logged();
+        if(login != null && !login.isEmpty())
+        {
+            ServerApi api = ServerClient.getClient();
+            Call<ResponseModel> logout  = api.logout(login);
+            logout.enqueue(new Callback<ResponseModel>() {
+                @Override
+                public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+
+                    if(response.isSuccessful()) {
+                        if (response.body().getCode() == MessageCodes.OK.getCode()) {
+                            if (manager.logout()) {
+                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                startActivity(intent);
+                            }
+                        }
+                        else
+                            Toast.makeText(getApplicationContext(),"Nie można sie wylogować",Toast.LENGTH_LONG).show();
+                    }
+                    else
+                        Toast.makeText(getApplicationContext(),"Nie można sie wylogować",Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onFailure(Call<ResponseModel> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(),"Brak połączenia z serwerem",Toast.LENGTH_LONG).show();
+                }
+            });
         }
         return true;
     }

@@ -58,7 +58,8 @@ public class PointsRepository {
 
         @Override
         protected Void doInBackground(Points... points) {
-            pointsDao.insert(points[0]);
+            if(pointsDao.getPoint(points[0].getId()) == null)
+                pointsDao.insert(points[0]);
             return null;
         }
     }

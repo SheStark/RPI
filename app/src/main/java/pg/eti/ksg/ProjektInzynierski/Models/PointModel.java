@@ -1,16 +1,16 @@
 package pg.eti.ksg.ProjektInzynierski.Models;
 
-public class PointModel {
+/*public class PointModel {
     private double lat;
     private double lng;
     private String date;
-    private int id;
+    private Long id;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -47,5 +47,5 @@ public class PointModel {
     }
 
 
-}
+}*/
 
