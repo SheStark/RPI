@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -60,7 +61,7 @@ public class InvitationsRVAdapter extends RecyclerView.Adapter<InvitationsRVAdap
     public class InvitationsViewHolder extends RecyclerView.ViewHolder{
 
         private TextView login, name;
-        private Button acceptBtn,dismissBtn;
+        private ImageView acceptBtn,dismissBtn;
 
         public InvitationsViewHolder(@NonNull View itemView) {
             super(itemView);

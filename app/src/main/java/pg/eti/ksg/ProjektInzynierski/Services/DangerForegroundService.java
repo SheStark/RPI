@@ -192,13 +192,15 @@ public class DangerForegroundService extends Service {
         send.enqueue(new Callback<IdsModel>() {
             @Override
             public void onResponse(Call<IdsModel> call, Response<IdsModel> response) {
-                if(response.isSuccessful()){
+                if(!response.isSuccessful()){
                     return;
                 }
 
                 long pointId = response.body().getPointId();
-                point.setId(pointId);
-                pointsRepository.insert(point);
+                if(pointId != -1) {
+                    point.setId(pointId);
+                    pointsRepository.insert(point);
+                }
             }
 
             @Override
@@ -220,14 +222,16 @@ public class DangerForegroundService extends Service {
                     return;
                 }
                 id = response.body().getRouteId();
-                startD = false;
                 long pointId= response.body().getPointId();
-                routesRepository = new RoutesRepository(getApplication(),login);
-                pointsRepository = new PointsRepository(getApplication());
-                point.setRouteId(id);
-                point.setId(pointId);
-                routesRepository.insert(new Routes(id, login, true, point.getDate()));
-                pointsRepository.insert(point);
+                if(id != -1 && pointId !=-1) {
+                    startD = false;
+                    routesRepository = new RoutesRepository(getApplication(), login);
+                    pointsRepository = new PointsRepository(getApplication());
+                    point.setRouteId(id);
+                    point.setId(pointId);
+                    routesRepository.insert(new Routes(id, login, true, point.getDate()));
+                    pointsRepository.insert(point);
+                }
 
             }
 

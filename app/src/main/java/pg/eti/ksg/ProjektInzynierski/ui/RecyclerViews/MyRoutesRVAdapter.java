@@ -23,6 +23,7 @@ import pg.eti.ksg.ProjektInzynierski.R;
 public class MyRoutesRVAdapter extends RecyclerView.Adapter<MyRoutesRVAdapter.MyRoutesViewHolder>{
 
     private List<Routes> routes = new ArrayList<>();
+    private OnMyRouteRVListener listener;
 
     @NonNull
     @Override
@@ -31,24 +32,23 @@ public class MyRoutesRVAdapter extends RecyclerView.Adapter<MyRoutesRVAdapter.My
                 .inflate(R.layout.my_routes_recyclerview,parent,false);
 
 
-        return new MyRoutesViewHolder(view);
+        return new MyRoutesViewHolder(view,listener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyRoutesRVAdapter.MyRoutesViewHolder holder, int position) {
-        Routes route =routes.get(position);
+            Routes route = routes.get(position);
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        holder.routeData.setText(format.format(route.getStartDate()));
-        if(!route.isDangerous()) {
-            holder.image.setImageResource(R.drawable.ic_baseline_location_on_black);
-            holder.status.setText("Planowe udostępnianie");
-        }
-        else {
-            holder.status.setText("Niebezpieczeństwo");
-            holder.status.setTextColor(Color.RED);
-        }
+            holder.routeData.setText(format.format(route.getStartDate()));
+            if (!route.isDangerous()) {
+                holder.image.setImageResource(R.drawable.ic_baseline_location_on_black);
+                holder.status.setText("Planowe udostępnianie");
+            } else {
+                holder.status.setText("Niebezpieczeństwo");
+                holder.status.setTextColor(Color.RED);
+            }
 
     }
 
@@ -63,25 +63,44 @@ public class MyRoutesRVAdapter extends RecyclerView.Adapter<MyRoutesRVAdapter.My
         notifyDataSetChanged();
     }
 
+    public void setListener(OnMyRouteRVListener onMyRouteRVListener){
+        listener = onMyRouteRVListener;
+    }
+
     @Override
     public int getItemCount() {
+        if (routes.size()>10){
+            return 10;
+        }
         return routes.size();
     }
 
 
-    public class MyRoutesViewHolder extends RecyclerView.ViewHolder {
+    public class MyRoutesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView status;
         private TextView routeData;
         private ImageView image;
+        private OnMyRouteRVListener onMyRouteRVListener;
 
-        public MyRoutesViewHolder(@NonNull View itemView) {
+        public MyRoutesViewHolder(@NonNull View itemView,OnMyRouteRVListener onMyRouteRVListener) {
             super(itemView);
             status = itemView.findViewById(R.id.RVMyRoutesStatusTxt);
             routeData =itemView.findViewById(R.id.RVMyRoutesDateTxt);
             image = itemView.findViewById(R.id.RVMyRoutesImg);
 
+            this.onMyRouteRVListener=onMyRouteRVListener;
+            itemView.setOnClickListener(this);
 
         }
+
+        @Override
+        public void onClick(View v) {
+            onMyRouteRVListener.onMyRouteClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnMyRouteRVListener{
+        void onMyRouteClick(int position);
     }
 }

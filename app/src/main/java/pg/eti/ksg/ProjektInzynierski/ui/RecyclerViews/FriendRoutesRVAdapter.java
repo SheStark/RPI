@@ -21,6 +21,7 @@ import pg.eti.ksg.ProjektInzynierski.R;
 public class FriendRoutesRVAdapter extends RecyclerView.Adapter<FriendRoutesRVAdapter.FriendViewHolder> {
 
     private List<Routes> routes = new ArrayList<>();
+    private OnRouteRVListener listener;
 
     @NonNull
     @Override
@@ -29,17 +30,17 @@ public class FriendRoutesRVAdapter extends RecyclerView.Adapter<FriendRoutesRVAd
                 .inflate(R.layout.friend_routes_recyclerview,parent,false);
 
 
-        return new FriendViewHolder(view);
+        return new FriendViewHolder(view,listener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull FriendViewHolder holder, int position) {
-        Routes route =routes.get(position);
-        holder.friendLogin.setText(route.getFriendLogin());
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        holder.routeData.setText(format.format(route.getStartDate()));
-        if(!route.isDangerous())
-            holder.image.setImageResource(R.drawable.ic_baseline_location_on_black);
+            Routes route = routes.get(position);
+            holder.friendLogin.setText(route.getFriendLogin());
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            holder.routeData.setText(format.format(route.getStartDate()));
+            if (!route.isDangerous())
+                holder.image.setImageResource(R.drawable.ic_baseline_location_on_black);
 
     }
 
@@ -56,23 +57,43 @@ public class FriendRoutesRVAdapter extends RecyclerView.Adapter<FriendRoutesRVAd
 
     @Override
     public int getItemCount() {
+        if (routes.size()>10){
+            return 10;
+        }
         return routes.size();
     }
 
+    public void setListener(OnRouteRVListener onRouteRVListener)
+    {
+        listener = onRouteRVListener;
+    }
 
-    public class FriendViewHolder extends RecyclerView.ViewHolder {
+
+    public class FriendViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView friendLogin;
         private TextView routeData;
         private ImageView image;
+        private OnRouteRVListener onRouteRVListener;
 
-        public FriendViewHolder(@NonNull View itemView) {
+        public FriendViewHolder(@NonNull View itemView,OnRouteRVListener onRouteRVListener) {
             super(itemView);
             friendLogin = itemView.findViewById(R.id.RVFriendRoutesLogin);
             routeData =itemView.findViewById(R.id.RVFriendRoutesDateTxt);
             image = itemView.findViewById(R.id.RVFriendRoutesImg);
+            this.onRouteRVListener = onRouteRVListener;
 
+            itemView.setOnClickListener(this);
 
         }
+
+        @Override
+        public void onClick(View v) {
+            onRouteRVListener.onRouteClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnRouteRVListener{
+        void onRouteClick(int position);
     }
 }

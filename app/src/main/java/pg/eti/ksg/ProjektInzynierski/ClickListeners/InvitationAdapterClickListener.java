@@ -67,7 +67,7 @@ public class InvitationAdapterClickListener implements InvitationsRVAdapter.Clic
                 if(!response.isSuccessful()){
                     AlertDialogs.serverError(context);
                 }
-                
+                repository.delete(userLogin,invitation.getLogin());
 
             }
 

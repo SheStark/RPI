@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,10 +38,13 @@ public class HomeFragment extends Fragment {
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-
-        permission = Permissions.LocationPermission(getContext());
-        if(!permission)
-            requestPermissions(Permissions.LOCATION_PERMISSIONS,Permissions.LOCATION_REQUEST_CODE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            permission = Permissions.LocationPermission(getContext());
+            if (!permission)
+                requestPermissions(Permissions.LOCATION_PERMISSIONS, Permissions.LOCATION_REQUEST_CODE);
+        }
+        else
+            permission =true;
 
         helpBtn = root.findViewById(R.id.helpBtn);
 
@@ -73,6 +77,7 @@ public class HomeFragment extends Fragment {
             {
                 AlertDialogs.locationDisabledAlertDialog(getContext());
             }
+            AlertDialogs.startDangerAlertDialog(getContext());
         }else
             requestPermissions(Permissions.LOCATION_PERMISSIONS,Permissions.LOCATION_REQUEST_CODE);
     }

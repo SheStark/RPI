@@ -20,6 +20,7 @@ public class FriendsRVAdapter extends RecyclerView.Adapter<FriendsRVAdapter.Frie
 
     private List<Friends> friends = new ArrayList<>();
 
+
     @NonNull
     @Override
     public FriendsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,11 +52,19 @@ public class FriendsRVAdapter extends RecyclerView.Adapter<FriendsRVAdapter.Frie
 
         private TextView login, name, email;
 
+
         public FriendsViewHolder(@NonNull View itemView) {
             super(itemView);
             login = itemView.findViewById(R.id.RVFriendLoginTxt);
             name = itemView.findViewById(R.id.RVFriendNameTxt);
             email = itemView.findViewById(R.id.RVFriendEmailTxt);
+
+
+
         }
+
+
     }
+
+
 }

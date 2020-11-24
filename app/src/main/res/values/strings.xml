@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Rejestracja</string>
+    <string name="app_name">HelpApp</string>
     <string name="password">Hasło</string>
     <string name="login">Login</string>
     <string name="name">Imię</string>
@@ -26,6 +26,7 @@
     <string name="accept">Zaakceptuj</string>
     <string name="send_invitation">Wyślij zaproszenie</string>
     <string name="dismiss">Odrzuć</string>
+    <string name="directions">Znajdź trasę</string>
 
 
     <string name="menu_start">Strona Główna</string>

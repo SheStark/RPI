@@ -20,7 +20,6 @@ public class FriendsViewModel extends AndroidViewModel {
         super(application);
         this.application = application;
     }
-    // TODO: Implement the ViewModel
 
 
     public LiveData<UserWithFriends> getFriends(String userLogin) {

@@ -7,7 +7,7 @@ import android.os.Build;
 
 public class App extends Application {
     public static final String FOREGROUND_SERVICE_CHANNEL = "ForegroundServiceChannel";
-    public static final String FIREBASE_SERVICE_START_DANGER = "FirebaseServiceDanger";
+    public static final String FIREBASE_SERVICE = "FirebaseServiceDanger";
 
     @Override
     public void onCreate(){
@@ -27,10 +27,11 @@ public class App extends Application {
 
 
             NotificationChannel firebaseChannelDanger = new NotificationChannel(
-                    FIREBASE_SERVICE_START_DANGER,
+                    FIREBASE_SERVICE,
                     "Firebase Service Danger",
-                    NotificationManager.IMPORTANCE_DEFAULT
+                    NotificationManager.IMPORTANCE_HIGH
             );
+            firebaseChannelDanger.setDescription("Firebase Service Danger");
             manager.createNotificationChannel(firebaseChannelDanger);
         }
     }

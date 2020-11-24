@@ -1,6 +1,13 @@
 package pg.eti.ksg.ProjektInzynierski.ui.navigation;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -23,10 +30,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.util.Objects;
+
+import pg.eti.ksg.ProjektInzynierski.AlertDialogs;
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Users;
 import pg.eti.ksg.ProjektInzynierski.Models.MessageCodes;
 import pg.eti.ksg.ProjektInzynierski.Models.ResponseModel;
+import pg.eti.ksg.ProjektInzynierski.Permissions;
 import pg.eti.ksg.ProjektInzynierski.R;
+import pg.eti.ksg.ProjektInzynierski.Services.DangerForegroundService;
 import pg.eti.ksg.ProjektInzynierski.SharedPreferencesLoginManager;
 import pg.eti.ksg.ProjektInzynierski.server.ServerApi;
 import pg.eti.ksg.ProjektInzynierski.server.ServerClient;
@@ -44,6 +56,11 @@ public class NavigationActivity extends AppCompatActivity {
     private TextView navUserName, navUserEmail;
     private View headerView;
     private String login;
+    private SensorManager mSensorManager;
+    private float mAccel;
+    private float mAccelCurrent;
+    private float mAccelLast;
+    private boolean permission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,19 +68,22 @@ public class NavigationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_navigation);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //FloatingActionButton fab = findViewById(R.id.fab);
-        //fab.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-         //               .setAction("Action", null).show();
-         //   }
-        //});
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         manager = new SharedPreferencesLoginManager(this);
         login = manager.logged();
         NavigationView navigationView = findViewById(R.id.nav_view);
         headerView = navigationView.getHeaderView(0);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        permission = Permissions.LocationPermission(this);
+            if(!permission)
+                    requestPermissions(Permissions.LOCATION_PERMISSIONS,Permissions.LOCATION_REQUEST_CODE);
+        }
+        else {
+            permission = true;
+        }
+
 
         navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -71,6 +91,7 @@ public class NavigationActivity extends AppCompatActivity {
                return logout();
             }
         });
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -82,6 +103,13 @@ public class NavigationActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
         setTextViews();
         Log.d("Token", "Token = "+ FirebaseInstanceId.getInstance().getToken());
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Objects.requireNonNull(mSensorManager).registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
+        mAccel = 10f;
+        mAccelCurrent = SensorManager.GRAVITY_EARTH;
+        mAccelLast = SensorManager.GRAVITY_EARTH;
     }
 
     public boolean logout()
@@ -148,6 +176,72 @@ public class NavigationActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+
+    private final SensorEventListener mSensorListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+            mAccelLast = mAccelCurrent;
+            mAccelCurrent = (float) Math.sqrt((double) (x * x + y * y + z * z));
+            float delta = mAccelCurrent - mAccelLast;
+            mAccel = mAccel * 0.9f + delta;
+            if (mAccel > 12) {
+                help();
+            }
+        }
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
+    @Override
+    protected void onResume() {
+        mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
+        super.onResume();
+    }
+    @Override
+    protected void onPause() {
+        mSensorManager.unregisterListener(mSensorListener);
+        super.onPause();
+    }
+
+
+    public void help() {
+        Intent service=new Intent(this, DangerForegroundService.class);
+        if(isServiceRunning()){
+            return;
+        }
+        else if (permission) {
+            if(Permissions.isLocationEnabled(this))
+                startService(service);
+            else
+            {
+                AlertDialogs.locationDisabledAlertDialog(this);
+            }
+            AlertDialogs.startDangerAlertDialog(this);
+        }else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(Permissions.LOCATION_PERMISSIONS, Permissions.LOCATION_REQUEST_CODE);
+            }
+        }
+    }
+
+    public boolean isServiceRunning()
+    {
+        ActivityManager manager =(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if(manager!=null)
+        {
+            for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)){
+                if(DangerForegroundService.class.getName().equals(service.service.getClassName()))
+                    return true;
+            }
+        }
+
+        return false;
     }
 
 }
