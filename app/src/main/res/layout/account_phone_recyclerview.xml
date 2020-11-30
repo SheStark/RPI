@@ -3,7 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="wrap_content" android:background="#FFFFFF">
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_menu"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp">
 
     <TextView
         android:id="@+id/RVlargeText"
@@ -31,7 +35,7 @@
         android:id="@+id/RVdeleteAccount"
         android:layout_width="67dp"
         android:layout_height="43dp"
-        android:layout_marginStart="45dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="15dp"
         android:contentDescription="@string/delete"
         app:layout_constraintStart_toEndOf="@+id/RVlargeText"

@@ -46,7 +46,4 @@ public interface UserDao {
     @Transaction
     @Query("SELECT * FROM Users WHERE user_login = :login")
     UserWithFriends getFriendsSync(String login);
-
-
-
 }

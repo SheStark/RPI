@@ -21,7 +21,12 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
 import pg.eti.ksg.ProjektInzynierski.AlertDialogs;
+import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Friends;
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.UserWithFriends;
 import pg.eti.ksg.ProjektInzynierski.Models.MessageCodes;
 import pg.eti.ksg.ProjektInzynierski.Models.ResponseModel;
@@ -30,16 +35,19 @@ import pg.eti.ksg.ProjektInzynierski.SharedPreferencesLoginManager;
 import pg.eti.ksg.ProjektInzynierski.server.ServerApi;
 import pg.eti.ksg.ProjektInzynierski.server.ServerClient;
 import pg.eti.ksg.ProjektInzynierski.ui.RecyclerViews.FriendsRVAdapter;
+import pg.eti.ksg.ProjektInzynierski.ui.account.AccountFragment;
+import pg.eti.ksg.ProjektInzynierski.ui.directions.MapsActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class friends extends Fragment {
+public class friends extends Fragment implements FriendsRVAdapter.FriendClickListener {
 
     private FriendsViewModel mViewModel;
     private String user;
     private TextInputLayout invitationLogin;
     private Button sendInvitation;
+    private List<Friends> friendsList;
 
 
     public static friends newInstance() {
@@ -72,11 +80,13 @@ public class friends extends Fragment {
 
         FriendsRVAdapter adapter =new FriendsRVAdapter();
         friendRV.setAdapter(adapter);
+        adapter.setListener(this::onFriendClick);
 
         mViewModel.getFriends(user).observe(getViewLifecycleOwner(), new Observer<UserWithFriends>() {
             @Override
             public void onChanged(UserWithFriends userWithFriends) {
-                adapter.setFriends(userWithFriends.getFriends());
+                friendsList =userWithFriends.getFriends();
+                adapter.setFriends(friendsList);
             }
         });
 
@@ -90,7 +100,7 @@ public class friends extends Fragment {
                     Call<ResponseModel> call =api.sendInvitation(user,login);
                     call.enqueue(new Callback<ResponseModel>() {
                         @Override
-                        public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+                        public void onResponse(@NotNull Call<ResponseModel> call, @NotNull Response<ResponseModel> response) {
                             if(!response.isSuccessful())
                                 AlertDialogs.serverError(getContext());
                             else if(response.body().getCode() == MessageCodes.OK.getCode())
@@ -102,7 +112,7 @@ public class friends extends Fragment {
                         }
 
                         @Override
-                        public void onFailure(Call<ResponseModel> call, Throwable t) {
+                        public void onFailure(@NotNull Call<ResponseModel> call, @NotNull Throwable t) {
                             AlertDialogs.networkError(getContext());
                         }
                     });
@@ -115,4 +125,10 @@ public class friends extends Fragment {
 
     }
 
+    @Override
+    public void onFriendClick(int position) {
+        //Intent intent = new Intent(getContext(), AccountFragment.class);
+        //intent.putExtra("login",friendsList.get(position).getLogin());
+        //startActivity(intent);
+    }
 }

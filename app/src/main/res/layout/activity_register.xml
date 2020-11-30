@@ -140,6 +140,8 @@
             android:layout_marginTop="15dp"
             android:onClick="RegisterBtnClick"
             android:text="@string/register"
+            android:textColor="#ffffff"
+            android:background="@drawable/brown_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/PasswordForm" />
 
@@ -149,7 +151,9 @@
             android:layout_height="50dp"
             android:layout_marginStart="55dp"
             android:layout_marginTop="25dp"
+            android:textColor="#ffffff"
             android:onClick="AlreadyRegisteredBtnClick"
+            android:background="@drawable/brown_button"
             android:text="@string/alreadyRegistered"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/RegisterBtn" />

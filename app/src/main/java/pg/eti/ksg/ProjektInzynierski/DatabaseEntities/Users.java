@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.sql.Date;
 
 @Entity
@@ -14,24 +16,24 @@ public class Users {
     @NonNull
     @ColumnInfo(name = "user_login")
     private String login;
-
     private String name;
-
     private String surname;
     private String email;
     private String city;
-
     private Date birth;
 
-    public Users() {
-    }
-    public Users(String login, String name, String surname, String email) {
+    public Users(@NotNull String login, String name, String surname, String email) {
         this.login = login;
         this.name = name;
         this.surname = surname;
         this.email = email;
     }
 
+    public Users() {
+        login = "";
+    }
+
+    @NotNull
     public String getLogin() {
         return login;
     }

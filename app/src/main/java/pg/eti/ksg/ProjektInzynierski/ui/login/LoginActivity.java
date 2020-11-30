@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 
+import pg.eti.ksg.ProjektInzynierski.Services.DangerForegroundService;
+import pg.eti.ksg.ProjektInzynierski.Services.ShakeService;
 import pg.eti.ksg.ProjektInzynierski.ui.RecyclerViews.AccountsPhoneRVAdapter;
 import pg.eti.ksg.ProjektInzynierski.Models.LoginModel;
 import pg.eti.ksg.ProjektInzynierski.ui.navigation.NavigationActivity;
@@ -59,7 +62,13 @@ public class LoginActivity extends AppCompatActivity {
             {
                 Intent serviceIntent = new Intent(this, SynchronizeDataService.class);
                 SynchronizeDataService.enqueueWork(this,serviceIntent);
+
             }
+            if(!isServiceRunning()) {
+                Intent shake = new Intent(this, ShakeService.class);
+                startService(shake);
+            }
+
             Intent intent =new Intent(getApplicationContext(), NavigationActivity.class);
             startActivity(intent);
         }
@@ -98,8 +107,8 @@ public class LoginActivity extends AppCompatActivity {
             });
             RVaccountsOnPhone.setAdapter(adapter);
             RVaccountsOnPhone.setLayoutManager(new LinearLayoutManager(this));
-            RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-            RVaccountsOnPhone.addItemDecoration(itemDecoration);
+            //RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+            //RVaccountsOnPhone.addItemDecoration(itemDecoration);
         }
     }
     public void clearRV()
@@ -145,6 +154,9 @@ public class LoginActivity extends AppCompatActivity {
                     Intent serviceIntent = new Intent(getApplicationContext(), SynchronizeDataService.class);
                     SynchronizeDataService.enqueueWork(getApplicationContext(),serviceIntent);
 
+                    Intent shake = new Intent(getApplicationContext(), ShakeService.class);
+                    startService(shake);
+
                     Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
                     startActivity(intent);
                 }
@@ -173,4 +185,17 @@ public class LoginActivity extends AppCompatActivity {
         return this;
     }
 
+    public boolean isServiceRunning()
+    {
+        ActivityManager manager =(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if(manager!=null)
+        {
+            for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)){
+                if(ShakeService.class.getName().equals(service.service.getClassName()))
+                    return true;
+            }
+        }
+
+        return false;
+    }
 }

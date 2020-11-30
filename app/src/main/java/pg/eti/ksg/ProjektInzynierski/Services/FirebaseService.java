@@ -57,7 +57,6 @@ public class FirebaseService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
             String stringType = remoteMessage.getData().get("type");
-            SharedPreferencesLoginManager manager = new SharedPreferencesLoginManager(this);
             if(stringType != null ) {
                 int type = Integer.parseInt(stringType);
                 switch(type) {

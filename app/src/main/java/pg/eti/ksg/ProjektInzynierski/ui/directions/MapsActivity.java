@@ -131,7 +131,8 @@ public class MapsActivity  extends FragmentActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 if(isFriendRoute) {
                     if (mDestination != null && mOrigin != null) {
-                        String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?saddr=%f,%f&daddr=%f,%f", mOrigin.latitude, mOrigin.longitude, mDestination.latitude, mDestination.longitude);
+                        String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?saddr=%f,%f&daddr=%f,%f",
+                                mOrigin.latitude, mOrigin.longitude, mDestination.latitude, mDestination.longitude);
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                         intent.setPackage("com.google.android.apps.maps");
                         startActivity(intent);

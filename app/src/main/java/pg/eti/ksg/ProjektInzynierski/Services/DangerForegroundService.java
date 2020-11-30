@@ -41,6 +41,7 @@ import pg.eti.ksg.ProjektInzynierski.SharedPreferencesLoginManager;
 import pg.eti.ksg.ProjektInzynierski.server.ServerApi;
 import pg.eti.ksg.ProjektInzynierski.server.ServerClient;
 import pg.eti.ksg.ProjektInzynierski.ui.home.HomeFragment;
+import pg.eti.ksg.ProjektInzynierski.ui.login.LoginActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,13 +71,15 @@ public class DangerForegroundService extends Service {
     @SuppressLint("MissingPermission")
     @Override
     public int onStartCommand(Intent intent,int flags, int startId){
-        Intent notificationIntent = new Intent(this, HomeFragment.class);
+        Intent notificationIntent = new Intent(this, LoginActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
 
         Notification notification =new NotificationCompat.Builder(this, FOREGROUND_SERVICE_CHANNEL)
                 .setContentTitle("Udostępnianie lokalizacji")
                 .setContentText("Niebezpieczeństwo! Twoja lokalizacja udostępniana jest znajomym")
                 .setSmallIcon(R.drawable.ic_baseline_location_on_black)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setContentIntent(pendingIntent)
                 .build();
 
@@ -94,15 +97,15 @@ public class DangerForegroundService extends Service {
             stopSelf();
 
         setCallback();
-        location = LocationServices.getFusedLocationProviderClient(this);
+        api = ServerClient.getClient();
 
+
+        location = LocationServices.getFusedLocationProviderClient(this);
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(1000*60*2);
-        locationRequest.setFastestInterval(1000*60*1);
+        locationRequest.setFastestInterval(1000*60);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
         location.requestLocationUpdates(locationRequest, locationCallback,Looper.getMainLooper());
-        api = ServerClient.getClient();
 
         runnable =new Runnable() {
             @Override
@@ -112,7 +115,6 @@ public class DangerForegroundService extends Service {
         };
 
         new Thread(runnable).start();
-
         timer = new Timer();
         timerTask = new TimerTask() {
             @Override
@@ -120,10 +122,7 @@ public class DangerForegroundService extends Service {
                 new Thread(runnable).start();
             }
         };
-
         timer.schedule(timerTask,1000*60*4,1000*60*4);
-
-
 
         return START_STICKY;
     }

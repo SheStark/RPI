@@ -61,8 +61,8 @@ public class RegisterActivity extends AppCompatActivity {
         getValuesForm();
 
         ServerApi api = ServerClient.getClient();
-        Call<ResponseModel> call = api.register(new RegisterModel(login,name,surname,email,password));
 
+        Call<ResponseModel> call = api.register(new RegisterModel(login,name,surname,email,password));
         call.enqueue(new Callback<ResponseModel>() {
             @Override
             public void onResponse(Call<ResponseModel> call, retrofit2.Response<ResponseModel> response) {
@@ -73,13 +73,10 @@ public class RegisterActivity extends AppCompatActivity {
                     getResponse(MessageCodes.fromInt(response.body().getCode()));
                     return;
                 }
-
                 Toast.makeText(RegisterActivity.this,"Rejestracja przebiegła prawidłowo ",Toast.LENGTH_LONG).show();
                 Intent intent =new Intent(getApplicationContext(),LoginActivity.class);
                 startActivity(intent);
-
             }
-
             @Override
             public void onFailure(Call<ResponseModel> call, Throwable t) {
                 Toast.makeText(RegisterActivity.this,t.getMessage(),Toast.LENGTH_LONG).show();

@@ -29,7 +29,6 @@ public interface PointsDao {
     @Delete
     void delete(Points point);
 
-
     @Query("SELECT * FROM Points WHERE route_id =:routeId ORDER BY point_date ASC")
     LiveData<List<Points>> getRoutePoints(Long routeId);
 

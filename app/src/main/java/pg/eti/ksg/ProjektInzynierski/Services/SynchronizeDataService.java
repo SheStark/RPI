@@ -61,93 +61,25 @@ public class SynchronizeDataService extends JobIntentService {
                 Users user = repository.getUserSync();
                 if(user == null || user.getLogin().isEmpty())
                 {
-                    Call<Users> currentUser = api.getCurrentUser(login);
-                    Response<Users> response = currentUser.execute();
-                    if(response.isSuccessful())
-                    {
-                        repository.insert(response.body());
-                        userLogin = response.body().getLogin();
-                        SharedPreferencesLoginData newUser = new SharedPreferencesLoginData(userLogin,response.body().getName(),response.body().getSurname());
-                        manager.addData(newUser);
-                    }
-                    else {
-                        isSynchronized = false;
-                    }
-
+                    synchronizeUserData(login);
                 }
                 else
                     userLogin = user.getLogin();
 
                 if(userLogin != null){
-                    InvitationsRepository invitationsRepository =new InvitationsRepository(getApplication(),userLogin);
-                    Call<List<Users>> invitations = api.getUserInvitations(userLogin);
-                    Response<List<Users>> response = invitations.execute();
-                    if(response.isSuccessful())
-                    {
-                        if(response.body() != null) {
-                            for (Users users : response.body()) {
-                                invitationsRepository.insert(new Invitations(users.getLogin(), users.getName(), users.getSurname(), users.getCity()));
-                            }
-                        }
-                    }
-                    else
-                        isSynchronized = false;
+                    synchronizeInvitations();
                 }
                 if(userLogin != null)
                 {
-                    FriendsRepository friendsRepository =new FriendsRepository(getApplication(),userLogin);
-                    Call<List<Friends>> friends = api.getUserFriends(userLogin);
-                    Response<List<Friends>> response = friends.execute();
-                    if(response.isSuccessful())
-                    {
-                        if(response.body() != null)
-                            friendsRepository.insertList(response.body());
-                    }
-                    else
-                        isSynchronized = false;
-
+                    synchronizeFriends();
                 }
                 if(userLogin != null)
                 {
-                    RoutesRepository routesRepository =new RoutesRepository(getApplication(),userLogin);
-                    PointsRepository pointsRepository = new PointsRepository(getApplication());
-                    Call<List<RouteWithPoints>> myRoutes = api.getMyRoutes(userLogin);
-                    Response<List<RouteWithPoints>> response = myRoutes.execute();
-                    if(response.isSuccessful())
-                    {
-                        if(response.body() != null)
-                            for(RouteWithPoints route: response.body()){
-                                routesRepository.insert(route.getRoute());
-                                for(Points point: route.getPoints()){
-                                    pointsRepository.insert(point);
-                                }
-                            }
-                    }
-                    else
-                        isSynchronized = false;
-
+                    synchronizeRoutes();
                 }
-                if(userLogin != null)
-                {
-                    RoutesRepository routesRepository =new RoutesRepository(getApplication(),userLogin);
-                    PointsRepository pointsRepository = new PointsRepository(getApplication());
-                    Call<List<RouteWithPoints>> friendsRoutes = api.getFriendsRoutes(userLogin);
-                    Response<List<RouteWithPoints>> response = friendsRoutes.execute();
-                    if(response.isSuccessful())
-                    {
-                        if(response.body() != null)
-                            for(RouteWithPoints  route: response.body()){
-                                routesRepository.insert(route.getRoute());
-                                for(Points point: route.getPoints()){
-                                    pointsRepository.insert(point);
-                                }
-                            }
-                    }
-                    else
-                        isSynchronized = false;
-
+                if(userLogin != null){
+                    synchronizeFriendsRoutes();
                 }
-
 
                 if(isSynchronized)
                     manager.setToSynchronized();
@@ -160,5 +92,89 @@ public class SynchronizeDataService extends JobIntentService {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    public void synchronizeUserData(String login) throws IOException {
+        Call<Users> currentUser = api.getCurrentUser(login);
+        Response<Users> response = currentUser.execute();
+        if(response.isSuccessful())
+        {
+            repository.insert(response.body());
+            userLogin = response.body().getLogin();
+            SharedPreferencesLoginData newUser = new SharedPreferencesLoginData(userLogin,response.body().getName(),response.body().getSurname());
+            manager.addData(newUser);
+        }
+        else {
+            isSynchronized = false;
+        }
+    }
+
+    public void synchronizeInvitations() throws IOException {
+        InvitationsRepository invitationsRepository =new InvitationsRepository(getApplication(),userLogin);
+        Call<List<Users>> invitations = api.getUserInvitations(userLogin);
+        Response<List<Users>> response = invitations.execute();
+        if(response.isSuccessful())
+        {
+            if(response.body() != null) {
+                for (Users users : response.body()) {
+                    invitationsRepository.insert(new Invitations(users.getLogin(), users.getName(), users.getSurname(), users.getCity()));
+                }
+            }
+        }
+        else
+            isSynchronized = false;
+    }
+    public void synchronizeFriends() throws IOException {
+        FriendsRepository friendsRepository =new FriendsRepository(getApplication(),userLogin);
+        Call<List<Friends>> friends = api.getUserFriends(userLogin);
+        Response<List<Friends>> response = friends.execute();
+        if(response.isSuccessful())
+        {
+            if(response.body() != null)
+                friendsRepository.insertList(response.body());
+        }
+        else
+            isSynchronized = false;
+    }
+    public void synchronizeRoutes() throws IOException {
+        RoutesRepository routesRepository =new RoutesRepository(getApplication(),userLogin);
+        PointsRepository pointsRepository = new PointsRepository(getApplication());
+        Call<List<RouteWithPoints>> myRoutes = api.getMyRoutes(userLogin);
+        Response<List<RouteWithPoints>> response = myRoutes.execute();
+        if(response.isSuccessful())
+        {
+            if(response.body() != null)
+                for(RouteWithPoints route: response.body()){
+                    routesRepository.insert(route.getRoute());
+                    for(Points point: route.getPoints()){
+                        pointsRepository.insert(point);
+                    }
+                }
+        }
+        else
+            isSynchronized = false;
+    }
+
+    public void synchronizeFriendsRoutes() throws IOException {
+        RoutesRepository routesRepository =new RoutesRepository(getApplication(),userLogin);
+        PointsRepository pointsRepository = new PointsRepository(getApplication());
+        Call<List<RouteWithPoints>> friendsRoutes = api.getFriendsRoutes(userLogin);
+        Response<List<RouteWithPoints>> response = friendsRoutes.execute();
+        if(response.isSuccessful())
+        {
+            if(response.body() != null)
+                for(RouteWithPoints  route: response.body()){
+                    routesRepository.insert(route.getRoute());
+                    for(Points point: route.getPoints()){
+                        pointsRepository.insert(point);
+                    }
+                }
+        }
+        else
+            isSynchronized = false;
+    }
+    public void synchronizeMessages()
+    {
+        //TODO
     }
 }

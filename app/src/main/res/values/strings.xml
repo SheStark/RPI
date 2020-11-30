@@ -27,6 +27,8 @@
     <string name="send_invitation">Wyślij zaproszenie</string>
     <string name="dismiss">Odrzuć</string>
     <string name="directions">Znajdź trasę</string>
+    <string name="city">Miasto</string>
+    <string name="birth">Data urodzenia</string>
 
 
     <string name="menu_start">Strona Główna</string>

@@ -3,6 +3,7 @@ package pg.eti.ksg.ProjektInzynierski.server;
 import java.util.List;
 
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Friends;
+import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Messages;
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Points;
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Routes;
 import pg.eti.ksg.ProjektInzynierski.DatabaseEntities.Users;
@@ -58,4 +59,16 @@ public interface ServerApi {
 
     @POST("/user/logout/{login}")
     Call<ResponseModel> logout(@Path("login") String userLogin);
+
+    @POST("/messages/send/{userLogin}")
+    Call<ResponseModel> sendMessage(@Path("userLogin")String userLogin, @Body Messages messages);
+
+    @GET("/messages/get/{userLogin}")
+    Call<List<Messages>> getMessages(@Path("userLogin")String userLogin);
+
+    @POST("/friends/{userLogin}/delete/{friendLogin}")
+    Call<ResponseModel> deleteFriend(@Path("userLogin") String userLogin, @Path("friendLogin") String friendLogin);
+
+    @POST("/user/new/token{login}")
+    Call<ResponseModel> sendToken(@Path("login") String userLogin, @Body String token);
 }

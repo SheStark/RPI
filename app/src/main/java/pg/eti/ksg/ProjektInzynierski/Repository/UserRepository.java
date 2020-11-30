@@ -24,10 +24,17 @@ public class UserRepository {
         userDao = database.userDao();
         this.login = login;
     }
+    public LiveData<Users> getUser() {
+        if(user == null)
+            user = userDao.getUser(login);
+        return user;
+    }
 
-    /*public LiveData<List<Users>> getAllUsers() {
-        return allUsers;
-    }*/
+    public LiveData<UserWithFriends> getFriends() {
+        if(friends == null)
+            friends = userDao.getFriends(login);
+        return friends;
+    }
 
     public void insert(Users user)
     {
@@ -45,12 +52,6 @@ public class UserRepository {
     }
 
 
-    public LiveData<Users> getUser() {
-        if(user == null)
-            user = userDao.getUser(login);
-        return user;
-    }
-
     public Users getUserSync()
     {
         return userDao.getUserSync(login);
@@ -59,13 +60,6 @@ public class UserRepository {
     public UserWithFriends getFriendsSync()
     {
         return userDao.getFriendsSync(login);
-    }
-
-
-    public LiveData<UserWithFriends> getFriends() {
-        if(friends == null)
-            friends = userDao.getFriends(login);
-        return friends;
     }
 
     private static class InsertAsyncTask extends AsyncTask<Users,Void,Void>{

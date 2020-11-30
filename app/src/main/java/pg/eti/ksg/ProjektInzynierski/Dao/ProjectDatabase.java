@@ -32,6 +32,16 @@ public abstract class ProjectDatabase extends RoomDatabase {
 
     private static ProjectDatabase database;
 
+    public static synchronized ProjectDatabase getDatabase(Context context){
+        if(database == null){
+            database = Room.databaseBuilder(context.getApplicationContext(),
+                    ProjectDatabase.class,"Logged users database")
+                    .fallbackToDestructiveMigration()
+                    .build();
+        }
+        return database;
+    }
+
     public abstract UserDao userDao();
 
     public abstract RoutesDao routesDao();
@@ -50,45 +60,7 @@ public abstract class ProjectDatabase extends RoomDatabase {
 
     public abstract UserRoutesDao userRoutesDao();
 
-    public static synchronized ProjectDatabase getDatabase(Context context){
-        if(database == null){
-            database = Room.databaseBuilder(context.getApplicationContext(),
-                    ProjectDatabase.class,"Logged users database")
-                    .fallbackToDestructiveMigration()
-                    //.addCallback(callback)
-                    .build();
-        }
 
-        return database;
-    }
-
-    private static RoomDatabase.Callback callback =new RoomDatabase.Callback(){
-        @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
-            new AddAsyncTask(database).execute();
-        }
-    };
-
-    private static class AddAsyncTask extends AsyncTask<Void,Void,Void>{
-
-        private RoutesDao routesDao;
-        private UserRoutesDao userRoutesDao;
-
-        public AddAsyncTask(ProjectDatabase db) {
-            this.routesDao = db.routesDao();
-            this.userRoutesDao =db.userRoutesDao();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            String date = "2020-01-01 20:00:00";
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-            return null;
-        }
-
-    }
 
 
 
