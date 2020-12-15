@@ -248,14 +248,14 @@ public class DangerForegroundService extends Service {
         locationCallback = new LocationCallback(){
             @Override
             public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
+            if (locationResult == null) {
+                return;
+            }
+            for (Location location : locationResult.getLocations()) {
+                if (location != null) {
+                    latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 }
-                for (Location location : locationResult.getLocations()) {
-                    if (location != null) {
-                        latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    }
-                }
+            }
             }
 
         };
